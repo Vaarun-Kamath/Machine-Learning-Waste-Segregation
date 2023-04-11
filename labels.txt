@@ -1,0 +1,3 @@
+0 Nothing
+1 Recyclable Waste
+2 Dry Waste

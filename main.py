@@ -33,6 +33,7 @@ while True:
 
     # Predicts the model
     prediction = model.predict(image)
+    model
     index = np.argmax(prediction)
     class_name = class_names[index]
     confidence_score = prediction[0][index]
