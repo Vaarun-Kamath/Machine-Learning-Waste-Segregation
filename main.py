@@ -7,7 +7,7 @@ np.set_printoptions(suppress=True)
 
 # Load the model
 # model = load_model(r"Projects\Machine-Learning-Waste-Segregation\keras_model.h5", compile=False)
-model = load_model(r"keras_model.h5", compile=False)
+model = load_model(r"keras_model_new.h5", compile=False)
 
 # Load the labels
 class_names = open(r"labels.txt", "r").readlines()
