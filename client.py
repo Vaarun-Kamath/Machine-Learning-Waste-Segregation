@@ -21,9 +21,9 @@ ADDR=(SERVER,PORT)
 
 def turn_servo(x:int, /)->None:
 	global angle
-	angle = x*120
+	angle = x*60
 	print(f'\x1b[41m{angle = }\x1b[0m')
-	motor.ChangeDutyCycle(2+angle/36)
+	motor.ChangeDutyCycle(2+angle/18)
 	time.sleep(0.5)
 	#motor.ChangeDutyCycle(0)
 
