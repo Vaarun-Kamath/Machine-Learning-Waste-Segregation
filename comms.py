@@ -25,6 +25,51 @@ class_names = open("labels.txt", "r").readlines()
 def split_at(arr:list, x:int, /):
     return arr[:x], arr[x:]
 
+
+def get_decision(val:str, /)-> int:
+    val = val.lower()
+    if 'dry' in val: return DRY
+    elif 'wet' in val: return WET
+    elif 'recycl' in val: return RECYCLE
+    else: return CLOSED
+
+
+def predict_waste_type()-> int:
+    # Predicts the model
+    image = cv.imread('IMG.jpg')
+    image = cv.resize(image, (224, 224), interpolation=cv.INTER_AREA)
+
+    # Make the image a numpy array and reshape it to the models input shape.
+    image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
+    
+    # Normalize the image array
+    image = (image / 127.5) - 1
+    prediction = model.predict(image)
+
+    index = np.argmax(prediction)
+    class_name = class_names[index]
+    confidence_score = prediction[0][index]
+    # decision = int(class_name[0]) ########!!!!!!!!! UN COMMENT THIS PLS :)
+    # decision = random.randint(0,3)
+    # decision = int(class_name[0])-1
+    decision = get_decision(class_name)
+    print("---------------------------------------------")
+    print(f"Confidence Sent: {confidence_score}")
+    print(f"Classification Sent : {class_name[2:]}")
+    print("---------------------------------------------")
+    # Print prediction and confidence score
+    # keyboard_input = cv.waitKey(1)
+    # 27 is the ASCII for the esc key on your keyboard.
+    # if keyboard_input == 27:
+    #     print("Class:", class_name[2:], end="")
+    #     # print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
+    #     decision = int(class_name[0])
+    #     running = False
+        # socket.close(client_socket)
+        # break
+    return decision
+
+
 def receiver(client_socket, client_address):
     global decision, sent
     print(f'{client_address[0]} [{client_address[1]}] joined')
@@ -46,38 +91,7 @@ def receiver(client_socket, client_address):
             #! calculations
             #! function must return 1: dry, 2: recyclable, 3: wet
             #!decision = function
-
-            # Predicts the model
-            image = cv.imread('IMG.jpg')
-            image = cv.resize(image, (224, 224), interpolation=cv.INTER_AREA)
-
-            # Make the image a numpy array and reshape it to the models input shape.
-            image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
-            #
-            # # Normalize the image array
-            image = (image / 127.5) - 1
-            prediction = model.predict(image)
-
-            index = np.argmax(prediction)
-            class_name = class_names[index]
-            confidence_score = prediction[0][index]
-            # decision = int(class_name[0]) ########!!!!!!!!! UN COMMENT THIS PLS :)
-            # decision = random.randint(0,3)
-            decision = int(class_name[0])-1
-            print("---------------------------------------------")
-            print(f"Confidence Sent: {confidence_score}")
-            print(f"Classification Sent : {class_name[2:]}")
-            print("---------------------------------------------")
-            # Print prediction and confidence score
-            # keyboard_input = cv.waitKey(1)
-            # 27 is the ASCII for the esc key on your keyboard.
-            # if keyboard_input == 27:
-            #     print("Class:", class_name[2:], end="")
-            #     # print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
-            #     decision = int(class_name[0])
-            #     running = False
-                # socket.close(client_socket)
-                # break
+            decision = predict_waste_type()
             if decision != -1:
                 sent = False
 
