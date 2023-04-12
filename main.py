@@ -1,15 +1,16 @@
 from keras.models import load_model  # TensorFlow is required for Keras to work
 import cv2  # Install opencv-python
 import numpy as np
-
+import time
 # Disable scientific notation for clarity
 np.set_printoptions(suppress=True)
 
 # Load the model
-model = load_model("keras_Model.h5", compile=False)
+# model = load_model(r"Projects\Machine-Learning-Waste-Segregation\keras_model.h5", compile=False)
+model = load_model(r"keras_model.h5", compile=False)
 
 # Load the labels
-class_names = open("labels.txt", "r").readlines()
+class_names = open(r"labels.txt", "r").readlines()
 
 # CAMERA can be 0 or 1 based on default camera of your computer
 camera = cv2.VideoCapture(0)
@@ -39,15 +40,19 @@ while True:
     confidence_score = prediction[0][index]
 
     # Print prediction and confidence score
-    print("Class:", class_name[2:], end="")
-    print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
+    # print("Class:", class_name[2:], end="")
+    # print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
 
     # Listen to the keyboard for presses.
     keyboard_input = cv2.waitKey(1)
 
     # 27 is the ASCII for the esc key on your keyboard.
     if keyboard_input == 27:
-        break
+        print("Class:", class_name[2:], end="")
+        print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
+        time.sleep(5)
+        # print("hello")
+        # break
 
 camera.release()
 cv2.destroyAllWindows()
