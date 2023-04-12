@@ -5,7 +5,7 @@ import numpy as np
 import time
 import struct
 from keras.models import load_model
-import random
+# import random
 import threading
 import cv2 as cv
 
@@ -63,7 +63,7 @@ def receiver(client_socket, client_address):
             confidence_score = prediction[0][index]
             # decision = int(class_name[0]) ########!!!!!!!!! UN COMMENT THIS PLS :)
             # decision = random.randint(0,3)
-            decision = 2
+            decision = int(class_name[0])-1
             print("---------------------------------------------")
             print(f"Confidence Sent: {confidence_score}")
             print(f"Classification Sent : {class_name[2:]}")
@@ -78,7 +78,9 @@ def receiver(client_socket, client_address):
             #     running = False
                 # socket.close(client_socket)
                 # break
-            sent = False
+            if decision != -1:
+                sent = False
+
 
 def sender(client_socket, client_address):
     global sent
