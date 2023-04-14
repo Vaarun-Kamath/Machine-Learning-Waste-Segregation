@@ -11,15 +11,16 @@ import cv2 as cv
 
 
 KB = 1024
-CLOSED = 0
-DRY = 1
-RECYCLE = 2
-WET = 3
+CLOSED = -1
+DRY = 0
+RECYCLE = 1
+WET = 2
 PORT = 10050
+
 decision = CLOSED
 running = False
 sent = False
-model = load_model("keras_Model.h5", compile=False)
+model = load_model("keras_model_new.h5", compile=False)
 class_names = open("labels.txt", "r").readlines()
 
 def split_at(arr:list, x:int, /):
@@ -91,9 +92,12 @@ def receiver(client_socket, client_address):
             #! calculations
             #! function must return 1: dry, 2: recyclable, 3: wet
             #!decision = function
-            decision = predict_waste_type()
-            if decision != -1:
-                sent = False
+            
+            
+            #? decision = predict_waste_type()
+            decision = min(2,max(int(input("Dec: ")),-1))
+            # if decision != -1:
+            sent = False
 
 
 def sender(client_socket, client_address):
