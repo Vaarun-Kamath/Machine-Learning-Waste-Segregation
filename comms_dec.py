@@ -20,14 +20,8 @@ PORT = 10050
 decision = CLOSED
 running = False
 sent = False
-
-#This model should work, its combined with the old ones and our own images in the dataset
-# model = load_model("keras_model_upgraded_new.h5", compile=False)
-# class_names = open("labels.txt", "r").readlines()
-
-#however if the above one does not work, use this model below which uses just our images
-model = load_model("keras_model_our_new.h5", compile=False)
-class_names = open("labels_our_new.txt", "r").readlines()
+model = load_model("keras_model_new.h5", compile=False)
+class_names = open("labels.txt", "r").readlines()
 
 def split_at(arr:list, x:int, /):
     return arr[:x], arr[x:]
@@ -100,10 +94,12 @@ def receiver(client_socket, client_address):
             #!decision = function
             
             
-            decision = predict_waste_type()
-            # decision = min(2,max(int(input("Dec: ")),-1))
+            # decision = predict_waste_type()
+            decision = min(2,max(int(input("Dec: ")),-1))
             # if decision != -1:
             sent = False
+            # input("Continue? : ")
+            
 
 
 def sender(client_socket, client_address):
